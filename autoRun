@@ -1,0 +1,9 @@
+#!/bin/bash
+
+./McEliece.py -g -m $1 -t $2 -o m$1t$2 -v
+echo what is the k
+read  kay
+./MatrixCodec.py -e 'S' -k $kay -v -o m$1t$2.binMsg
+./McEliece.py -e m$1t$2.binMsg  -gen m$1t$2.gen -pub m$1t$2.pub -o m$1t$2.codeword 
+./InfoSet.py  -cw m$1t$2.codeword -par m$1t$2.parity -t $2 -er m$1t$2.realErrorV 
+
