@@ -30,6 +30,7 @@ def prange(C, H, t, e):
             print("Creating P...")
             P=permutationMatrix(rawH.shape[1])
             HP=(rawH*P).applyfunc(lambda x: mod(x,2))
+            print("Attempting Gaussian elimination...")
             check,primeH=Gauss_Elim(HP,HP.shape[1]-HP.shape[0],HP.shape[1])
             if check:
                 print('Finding Q...')

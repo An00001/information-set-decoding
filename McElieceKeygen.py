@@ -33,6 +33,7 @@ def keygen(m_val, t_val, files):
     if args.v: print('\nP ='); sympy.pprint(P_matrix)
     # Compute k*n matrix G_pub = SGP
     G_pub = (S_matrix * G_matrix * P_matrix).applyfunc(lambda x: mod(x,2))
+    H_pub=(H_matrix*P_matrix).applyfunc(lambda x: mod(x,2))
     #my code to turn Gpub to systematic
     isSystem, G_pub_Sys=Gauss_Elim(G_pub, G_pub.shape[1]-G_pub.shape[0],G_pub.shape[1])
     if isSystem:
@@ -47,7 +48,7 @@ def keygen(m_val, t_val, files):
     # length of the Goppa Code
     if args.v: print("\nn = ", n_val)
     if args.v: print("k =", k_val)
-    writeKeys(G_matrix,G_pub, t_val, S_matrix, H_matrix, P_matrix, files)
+    writeKeys(G_matrix,G_pub, t_val, S_matrix, H_matrix,H_pub, P_matrix, files)
     
 # From the parity check matrix, create the Generator matrix
 def get_G(bin_H):

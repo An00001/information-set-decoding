@@ -19,11 +19,13 @@ def encrypt(mfile,gen, pubkey,cipherFile):
     message = myReadFromFile(mfile)
     #Encrypt the first part of the total message
     m=message[0,:]
-    print('1.Plain or 2.McEliece encryption?')
+    print('1.Plain Gen or 2.McEliece encryption?')
     encrypt=input()
     if int(encrypt)==1:
+        print('Plain Gen  selected..')
         x=(m * Gen).applyfunc(lambda x: mod(x,2))
     elif int(encrypt)==2:
+        print('McEliece selected..')
         x=(m * G_pub).applyfunc(lambda x: mod(x,2))
     else:
         print('No correct selection, exit..')
@@ -39,7 +41,7 @@ def encrypt(mfile,gen, pubkey,cipherFile):
             errorv[0,pos]=1
             i=i+1
     c=(x+errorv).applyfunc(lambda x: mod(x,2))
-    print(sympy.pretty(m), ' *encryption',encrypt,' = \n',sympy.pretty(x), ' (x) + \n',sympy.pretty(errorv),'(error) = \n', sympy.pretty(c), ' codeword')
+    print(sympy.pretty(m), ' *G',' = \n',sympy.pretty(x), ' (x) + \n',sympy.pretty(errorv),'(error) = \n', sympy.pretty(c), ' codeword')
     writeCipher(c,cipherFile)
     errorFile='m'+str(int(math.log2(Gen.shape[1])))+'t'+str(t_val)+'.realErrorV'
     writeCipher(errorv,errorFile)

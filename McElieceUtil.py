@@ -17,7 +17,7 @@ def writeToFile(filename):
     with gzip.open(filename, 'rb') as f:
         contents = pickle.loads(f.read())
     return contents
-def writeKeys(Gen_matrix,G_matrix, t_val, S_matrix, H_matrix, P_matrix, filename):
+def writeKeys(Gen_matrix,G_matrix, t_val, S_matrix, H_matrix,H_pub, P_matrix, filename):
     with gzip.open(filename + '.pub', 'wb') as f:
         f.write(pickle.dumps([G_matrix, t_val]))
     with gzip.open(filename + '.priv', 'wb') as f:
@@ -26,6 +26,8 @@ def writeKeys(Gen_matrix,G_matrix, t_val, S_matrix, H_matrix, P_matrix, filename
         f.write(pickle.dumps([H_matrix]))
     with gzip.open(filename + '.gen', 'wb') as f:
         f.write(pickle.dumps([Gen_matrix]))
+    with gzip.open(filename + '.Hpub', 'wb') as f:
+        f.write(pickle.dumps([H_pub]))
 parser = argparse.ArgumentParser()
 parser.add_argument("-v", help="Enable verbose mode", action="store_true")
 parser.add_argument("-vv", help="Enable very verbose mode",
