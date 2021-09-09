@@ -3,7 +3,7 @@ import random
 import sympy
 import numpy
 from McElieceUtil import *
-from Utilities import *
+from InfoSetUtilities import *
 
 x = sympy.Symbol('x')
 alpha = sympy.Symbol('a')
