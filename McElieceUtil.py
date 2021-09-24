@@ -2,6 +2,37 @@
 import argparse
 import gzip
 import pickle
+import sympy
+import random
+
+def prangeVec(t,p,l,k,n):
+    errorv=sympy.zeros(1,n)
+    positions=[]
+    i=0
+    ii=0
+    iii=0
+    iv=0    
+    while ii<p:
+        pos = random.randrange(int(k/2))
+        if pos not in positions:
+            positions.append(pos)
+            errorv[0,pos]=1
+            ii+=1        
+    while iii<p:
+        pos = random.randrange(int(k/2),k)
+        if pos not in positions:
+            positions.append(pos)
+            errorv[0,pos]=1
+            iii+=1
+                #Πρέπει να κατανείμω τα λάθη αναλογα όπως ψάχνει ο στερν ήηη να το πάω τελειως τυχαία;;;
+    while iv<t-2*p:       
+        pos = random.randrange(k+l,n)
+        if pos not in positions:
+            positions.append(pos)
+            errorv[0,pos]=1
+            iv+=1    
+    return errorv
+
 
 def writeCipher(output, filename):
     with gzip.open(filename , 'wb') as f:
@@ -48,5 +79,6 @@ parser.add_argument("-x", type=str, help="Encoded msg without errors")
 parser.add_argument("-par", type=str, help="Parity matrix")
 parser.add_argument("-cw", type=str,	help="Codeword")
 parser.add_argument("-er", type=str,	help="error vector")
-parser.add_argument("-gen", type=str,	help="Gen matrix")
+parser.add_argument("-pErr", type=int,	help="errors in section A(stern)")
+parser.add_argument("-l", type=int,	help="size of dimension l(stern)")
 args = parser.parse_args()

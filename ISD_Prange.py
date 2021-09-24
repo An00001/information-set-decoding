@@ -7,11 +7,11 @@ import itertools
 from InfoSetUtilities import *
 from McElieceUtil import *
 
-def prange(C, H, t, e):
+def prange(c, H, t, e):
     rawH=myReadFromFile(H)
-    per=permutationMatrix(rawH.shape[1])
+    #per=permutationMatrix(rawH.shape[1])
     #rawH=(rawH*per).applyfunc(lambda x: mod(x,2))
-    cword=myReadFromFile(C)
+    cword=myReadFromFile(c)
     realErrorV=myReadFromFile(e)
     syndr=(cword*rawH.T).applyfunc(lambda x: mod(x,2))
     #I=sympy.eye(rawH.shape[0])
@@ -55,7 +55,7 @@ def prange(C, H, t, e):
         errorV=(primeErrorV*P.T).applyfunc(lambda x: mod(x,2))
         isSyndr=(errorV*rawH.T).applyfunc(lambda x: mod(x,2))
         if int(t)==np.count_nonzero(errorV) :
-            print("Success, wt(e)=w=",np.count_nonzero(primeSyndr), " real error vector ",sympy.pretty(realErrorV), " and found ", sympy.pretty(errorV))
+            print("Success, wt(e)=w=",t, ", error vector found ",sympy.pretty(errorV), ' and the real is ',sympy.pretty(realErrorV))
             #print ('syndr=',sympy.pretty(syndr), 'primeSyndr', sympy.pretty(isSyndr))
             flag1=0
         else:
@@ -84,7 +84,6 @@ parser.add_argument("-par", type=str, help="Parity matrix")
 parser.add_argument("-t", type=int, help="Generate key pairs")
 parser.add_argument("-er", type=str,	help="error vector")
 args = parser.parse_args()
-if args.c and args.pub:
-    crack(args.c, args.pub)
-elif args.cw and args.par and args.t and args.er:
+
+if args.cw and args.par and args.t and args.er:
     prange(args.cw, args.par,args.t,args.er)

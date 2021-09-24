@@ -34,6 +34,7 @@ def keygen(m_val, t_val, files):
     # Compute k*n matrix G_pub = SGP
     G_pub = (S_matrix * G_matrix * P_matrix).applyfunc(lambda x: mod(x,2))
     H_pub=(H_matrix*P_matrix).applyfunc(lambda x: mod(x,2))
+    '''
     #my code to turn Gpub to systematic
     isSystem, G_pub_Sys=Gauss_Elim(G_pub, G_pub.shape[1]-G_pub.shape[0],G_pub.shape[1])
     if isSystem:
@@ -42,6 +43,7 @@ def keygen(m_val, t_val, files):
     else:
         print('Unable to systematic G_pub, exit..')  
         exit() 
+    '''
     if args.v: print('\nG_pub ='); sympy.pprint(G_pub); print(G_pub.shape)
     # Public key is (G_pub, t)
     # Private key is (S, G, P)

@@ -7,6 +7,7 @@ import sympy
 import gzip
 import pickle
 import random
+import itertools
 
 '''General utility functions'''
 def myWriteFile(output, filename):
@@ -133,4 +134,13 @@ def Gauss_Elim(matrix,colStart, colStop):
     else:
         return 0,matrix
         
-
+def getB(k,p):
+    lst = list(itertools.product([int(0), int(1)], repeat=k))    
+    lst2=[]
+    for i in lst:
+         if np.count_nonzero(i)==p:                        
+            mat=sympy.Matrix(i)
+            matMut=mat.as_mutable()
+            matMutT=matMut.T
+            lst2.append(matMutT)
+    return lst2

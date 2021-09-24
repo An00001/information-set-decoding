@@ -4,6 +4,33 @@
 echo what is the k
 read  kay
 ./MatrixCodec.py -e 'S' -k $kay -v -o m$1t$2.binMsg
-./McEliece.py -e m$1t$2.binMsg  -gen m$1t$2.gen -pub m$1t$2.pub -o m$1t$2.codeword 
-./InfoSet.py  -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -er m$1t$2.realErrorV 
+./McEliece.py -e m$1t$2.binMsg   -pub m$1t$2.pub -o m$1t$2.codeword 
+choise=-1
+pErr=0
+l=0
+while [ $choise -ne 0 ] 
+do
+echo Select attack :
+echo 0. Exit
+echo 1. Prange
+echo 2. Stern 
+read choise           
+if [ $choise -eq 1 ]
+then  
+./ISD_Prange.py  -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -er m$1t$2.realErrorV 
+elif  [ $choise -eq 0 ]
+then    
+exit 0
+elif [ $choise -eq 2 ]
+then 
+echo Give parameter p
+read pErr
+echo Give parameter l
+read l
+./ISD_Stern.py -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -pErr $pErr -l $l -er m$1t$2.realErrorV
+
+else    
+echo Wrong choise
+fi
+done
 

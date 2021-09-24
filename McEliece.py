@@ -12,41 +12,47 @@ def checkCode(x,H):
     H=myReadFromFile(H)        
     sympy.pprint((x*H.T).applyfunc(lambda x: mod(x,2)))
     
-def encrypt(mfile,gen, pubkey,cipherFile):
-    Gen=myReadFromFile(gen)
+def encrypt(mfile, pubkey,cipherFile):    
     G_pub, t_val = readFromFile(pubkey)
+    k=G_pub.shape[0]
     G_pub=sympy.Matrix(G_pub)
     message = myReadFromFile(mfile)
     #Encrypt the first part of the total message
-    m=message[0,:]
-    print('1.Plain Gen or 2.McEliece encryption?')
-    encrypt=input()
-    if int(encrypt)==1:
-        print('Plain Gen  selected..')
-        x=(m * Gen).applyfunc(lambda x: mod(x,2))
-    elif int(encrypt)==2:
-        print('McEliece selected..')
-        x=(m * G_pub).applyfunc(lambda x: mod(x,2))
-    else:
-        print('No correct selection, exit..')
-        exit()
+    m=message[0,:]    
+    x=(m * G_pub).applyfunc(lambda x: mod(x,2))
     errorv=sympy.zeros(1,G_pub.shape[1])
     positions=[]
     i=0
-    while i<t_val:
-        #Find position (>k) to create error bit
-        pos = random.randrange(G_pub.shape[1])
-        if pos not in positions and pos>G_pub.shape[0]:
-            positions.append(pos)
-            errorv[0,pos]=1
-            i=i+1
+    print('What kind of error vector to create? \n1.Create a Prange friendly vector, \n2.Create a Stern friendly vector')
+    errorKind=int(input())
+    if errorKind==1:
+        while i<t_val:
+            #Find position (>k) to create error bit
+            pos = random.randrange(G_pub.shape[1])
+            if pos not in positions and pos>G_pub.shape[0]:
+                positions.append(pos)
+                errorv[0,pos]=1
+                i=i+1    
+
+            
+        
+    else:
+        print('Give Stern parameters, p and l.')
+        print('Firtst give p:')
+        p=int(input())
+        print('Give l:')
+        l=int(input())
+        errorv=prangeVec(t_val,p,l,k,G_pub.shape[1])
+
+
     c=(x+errorv).applyfunc(lambda x: mod(x,2))
     print(sympy.pretty(m), ' *G',' = \n',sympy.pretty(x), ' (x) + \n',sympy.pretty(errorv),'(error) = \n', sympy.pretty(c), ' codeword')
     writeCipher(c,cipherFile)
-    errorFile='m'+str(int(math.log2(Gen.shape[1])))+'t'+str(t_val)+'.realErrorV'
+    errorFile='m'+str(int(math.log2(G_pub.shape[1])))+'t'+str(t_val)+'.realErrorV'
     writeCipher(errorv,errorFile)
-    wordFile='m'+str(int(math.log2(Gen.shape[1])))+'t'+str(t_val)+'.plainWord'
+    wordFile='m'+str(int(math.log2(G_pub.shape[1])))+'t'+str(t_val)+'.plainWord'
     writeCipher(x,wordFile)
+
 def decrypt(cfile, privkey, outfile):
     S_matrix, H_matrix, P_matrix, t_val = readFromFile(privkey)
     k_val = H_matrix.shape[0]
@@ -87,8 +93,8 @@ if args.vv:
     args.v = True
 if args.g and args.m and args.t and args.o:
     keygen(args.m, args.t, args.o)
-elif args.e and args.gen and args.pub and args.o:
-    encrypt(args.e,args.gen, args.pub, args.o)
+elif args.e  and args.pub and args.o:
+    encrypt(args.e, args.pub, args.o)
 elif args.d and args.priv and args.o:
     decrypt(args.d, args.priv, args.o)
 elif args.x and args.par:
