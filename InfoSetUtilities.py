@@ -112,7 +112,7 @@ def fixDiagonal(M,colStart,colStop):
 def Gauss_Elim(matrix,colStart, colStop):
     flag1=0
     flag2=0
-    while not flag1 and not flag1:
+    while not flag1 and not flag2:
         #sympy.pprint(matrix)
         row=-1
         for col in range(colStart,colStop):
