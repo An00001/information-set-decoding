@@ -4,8 +4,12 @@ import sympy
 import gzip
 import pickle
 from sympy.combinatorics import Permutation
+from McElieceUtil import *
 
-def encode(text, k_val):
+def encode(text, parity):
+    h=readFromFile(parity)
+    H=sympy.Matrix(h)
+    k_val=H.shape[1]-H.shape[0]
     output = []
     current = sympy.Matrix()
     for c in text:
@@ -43,7 +47,8 @@ def encode(text, k_val):
     output.append(current)
     output.append(final)
     if args.v:
-        for o in output:
+        print('The encoded text is:')
+        for o in output:            
             sympy.pprint(o)
     if args.o:
         with gzip.open(args.o, 'wb') as f:
@@ -76,9 +81,12 @@ parser.add_argument("-d", type=str,
 					help="File with matrices to be decoded to ASCII")
 parser.add_argument("-k", type=int, help="Length of each matrix")
 parser.add_argument("-v", help="Enable verbose mode", action="store_true")
+
+parser.add_argument("-par", type=str, help="Parity matrix")
+
 args = parser.parse_args()
-if args.e and args.k:
-    encode(args.e, args.k)
+if args.e and args.par:
+    encode(args.e, args.par)
 elif args.d:
     decode(args.d)
 else:

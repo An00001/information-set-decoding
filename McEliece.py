@@ -18,12 +18,14 @@ def encrypt(mfile, pubkey,cipherFile):
     G_pub=sympy.Matrix(G_pub)
     message = myReadFromFile(mfile)
     #Encrypt the first part of the total message
+
     m=message[0,:]    
     x=(m * G_pub).applyfunc(lambda x: mod(x,2))
     errorv=sympy.zeros(1,G_pub.shape[1])
     positions=[]
     i=0
-    print('What kind of error vector to create? \n1.Create a Prange friendly vector, \n2.Create a Stern friendly vector')
+
+    print('Encrypting the first part (vector) of the given text...\nWhat kind of error vector to create? \n1.Create a Prange friendly vector, \n2.Create a Stern friendly vector')
     errorKind=int(input())
     if errorKind==1:
         while i<t_val:

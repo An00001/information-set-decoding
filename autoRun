@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ./McEliece.py -g -m $1 -t $2 -o m$1t$2 -v
-echo what is the k
-read  kay
-./MatrixCodec.py -e 'S' -k $kay -v -o m$1t$2.binMsg
+echo Give a text to encode:
+read  txt
+./MatrixCodec.py -e $txt -par m$1t$2.Hpub -v -o m$1t$2.binMsg
 ./McEliece.py -e m$1t$2.binMsg   -pub m$1t$2.pub -o m$1t$2.codeword 
 choise=-1
 pErr=0
