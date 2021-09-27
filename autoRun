@@ -36,8 +36,12 @@ do
     echo 2. Stern 
     read choise           
 if [ $choise -eq 1 ]
-then  
+then
+    TIMEFORMAT='Prange time execution %R seconds.'
+    time {
     ./ISD_Prange.py  -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -er m$1t$2.realErrorV 
+    }
+    
 elif  [ $choise -eq 0 ]
 then    
     exit 0
@@ -48,8 +52,10 @@ then
     read pErr
     echo Give parameter l
     read l
+    TIMEFORMAT='Stern time execution %R seconds.'
+    time {
     ./ISD_Stern.py -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -pErr $pErr -l $l -er m$1t$2.realErrorV
-
+    }
 else    
     echo Wrong choise
 fi
