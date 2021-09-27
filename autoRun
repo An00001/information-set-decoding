@@ -3,6 +3,7 @@
 global=-1
 while [ $global -ne 0 ]
 do
+    echo
     echo Options:
     echo 0. Exit
     echo 1. Init a McEliece code with given m,t?
@@ -13,10 +14,14 @@ if [ $global -eq 1 ]
 then
     
     ./McEliece.py -g -m $1 -t $2 -o m$1t$2 -v
+    echo
     echo McEliece code created. Give a text to encode:
     read  txt
     ./MatrixCodec.py -e $txt -par m$1t$2.Hpub -v -o m$1t$2.binMsg
+    echo
+    
     ./McEliece.py -e m$1t$2.binMsg   -pub m$1t$2.pub -o m$1t$2.codeword 
+    echo Encryption done.
     
 else
 choise=-1
@@ -24,6 +29,7 @@ pErr=0
 l=0
 while [ $choise -ne 0 ] 
 do
+    echo
     echo ISD attack selected. Select an attack :
     echo 0. Exit
     echo 1. Prange
@@ -37,7 +43,8 @@ then
     exit 0
 elif [ $choise -eq 2 ]
 then 
-    echo Give parameter p (should be a lot smaller than k/2)    
+    echo
+    echo Give parameter p wich should be a lot smaller than k/2   
     read pErr
     echo Give parameter l
     read l
