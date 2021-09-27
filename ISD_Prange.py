@@ -56,6 +56,10 @@ def prange(c, H, t, e):
         isSyndr=(errorV*rawH.T).applyfunc(lambda x: mod(x,2))
         if int(t)==np.count_nonzero(errorV) :
             print("Success, wt(e)=w=",t, ", error vector found ",sympy.pretty(errorV), ' and the real is ',sympy.pretty(realErrorV))
+            if errorV==realErrorV:
+                print('Vectors are the same.')
+            else:
+                print('Vectors are not the same.')
             #print ('syndr=',sympy.pretty(syndr), 'primeSyndr', sympy.pretty(isSyndr))
             flag1=0
         else:
