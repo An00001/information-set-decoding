@@ -1,36 +1,51 @@
 #!/bin/bash
 
-./McEliece.py -g -m $1 -t $2 -o m$1t$2 -v
-echo Give a text to encode:
-read  txt
-./MatrixCodec.py -e $txt -par m$1t$2.Hpub -v -o m$1t$2.binMsg
-./McEliece.py -e m$1t$2.binMsg   -pub m$1t$2.pub -o m$1t$2.codeword 
+global=-1
+while [ $global -ne 0 ]
+do
+    echo Options:
+    echo 0. Exit
+    echo 1. Init a McEliece code with given m,t?
+    echo 2. Init ISD attack with given m,t?
+    read global
+
+if [ $global -eq 1 ]
+then
+    
+    ./McEliece.py -g -m $1 -t $2 -o m$1t$2 -v
+    echo McEliece code created. Give a text to encode:
+    read  txt
+    ./MatrixCodec.py -e $txt -par m$1t$2.Hpub -v -o m$1t$2.binMsg
+    ./McEliece.py -e m$1t$2.binMsg   -pub m$1t$2.pub -o m$1t$2.codeword 
+    
+else
 choise=-1
 pErr=0
 l=0
 while [ $choise -ne 0 ] 
 do
-echo Select attack :
-echo 0. Exit
-echo 1. Prange
-echo 2. Stern 
-read choise           
+    echo ISD attack selected. Select an attack :
+    echo 0. Exit
+    echo 1. Prange
+    echo 2. Stern 
+    read choise           
 if [ $choise -eq 1 ]
 then  
-./ISD_Prange.py  -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -er m$1t$2.realErrorV 
+    ./ISD_Prange.py  -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -er m$1t$2.realErrorV 
 elif  [ $choise -eq 0 ]
 then    
-exit 0
+    exit 0
 elif [ $choise -eq 2 ]
 then 
-echo Give parameter p
-read pErr
-echo Give parameter l
-read l
-./ISD_Stern.py -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -pErr $pErr -l $l -er m$1t$2.realErrorV
+    echo Give parameter p (should be a lot smaller than k/2)    
+    read pErr
+    echo Give parameter l
+    read l
+    ./ISD_Stern.py -cw m$1t$2.codeword -par m$1t$2.Hpub -t $2 -pErr $pErr -l $l -er m$1t$2.realErrorV
 
 else    
-echo Wrong choise
+    echo Wrong choise
 fi
 done
-
+fi
+done

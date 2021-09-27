@@ -77,7 +77,7 @@ def stern(c,H,t,p,l,e):
                     prErrR=(pSyndrR+p1).applyfunc(lambda x: mod(x,2))
                     lzero=sympy.zeros(1,l)
                     primeErrorV=vecB[eL1].row_join(vecB[eL2]).row_join(lzero).row_join(prErrR)  
-                                 
+                                
                     toBrake=1
                     break
                 else:
